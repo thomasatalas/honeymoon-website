@@ -2,30 +2,39 @@ import Hero from '../components/Hero.jsx'
 import Navbar from '../components/Navbar.jsx'
 import Timeline from '../components/Timeline.jsx'
 import Footer from '../components/Footer.jsx'
-import { journeyStops, progressMilestones } from '../data/itinerary.js'
+import TodayCard from '../components/TodayCard.jsx'
+import ProposalGallery from './ProposalGallery.jsx'
+import ShanghaiGallery from './ShanghaiGallery.jsx'
+import { useLanguage } from '../context/LanguageContext.jsx'
+import { journeyStops } from '../data/itinerary.js'
+import { flights } from '../data/flights.js'
+import { journalEntries } from '../data/journal.js'
 
 function Home() {
+  const { t } = useLanguage()
+
   return (
-    <main className="page-shell">
+    <main id="main-content" className="page-shell" tabIndex="-1">
       <Navbar />
       <Hero />
+      <TodayCard />
 
-      <section id="destinations" className="progress-section" aria-label="Honeymoon progress timeline">
+      <section id="destinations" className="progress-section" aria-label="Honeymoon destination progress">
         <div className="timeline-header">
-          <p className="section-tag">The Countdown</p>
-          <h2>From planning to home</h2>
+          <p className="section-tag">{t('progress.tag')}</p>
+          <h2>{t('progress.title')}</h2>
         </div>
 
-        <div className="progress-track" aria-hidden="true">
+        <div className="progress-track" aria-label="Journey destinations">
           <div className="progress-line">
             <span className="progress-line-fill" />
           </div>
 
           <div className="progress-steps">
-            {progressMilestones.map((step, index) => (
-              <div key={step} className="progress-step">
-                <span className={`progress-dot ${index === 0 ? 'is-active' : ''}`} />
-                <span className="progress-label">{step}</span>
+            {journeyStops.map((stop, index) => (
+              <div key={stop.city} className={`progress-step ${index === 0 ? 'is-active' : ''}`} data-city={stop.city}>
+                <span className="progress-dot" />
+                <span className="progress-label">{stop.city}</span>
               </div>
             ))}
           </div>
@@ -33,18 +42,28 @@ function Home() {
       </section>
 
       <Timeline stops={journeyStops} />
+      <ProposalGallery />
+      <ShanghaiGallery />
 
-      <section id="flights" className="micro-section" aria-label="Flight placeholder section">
+      <section id="flights" className="micro-section" aria-label="Honeymoon flights preview">
         <div className="micro-copy">
-          <p className="section-tag">Flights</p>
-          <h2>Private departures, seamless arrivals.</h2>
+          <p className="section-tag">{t('flights.tag')}</p>
+          <h2>{t('flights.title')}</h2>
+          <div className="home-flight-list">
+            {flights.map((flight) => (
+              <span key={flight.id}>{flight.airline}</span>
+            ))}
+          </div>
+          <a className="section-link" href="#/flights">View flight collection <span aria-hidden="true">→</span></a>
         </div>
       </section>
 
-      <section id="journal" className="micro-section micro-section--journal" aria-label="Journal placeholder section">
+      <section id="journal" className="micro-section micro-section--journal" aria-label="Honeymoon journal preview">
         <div className="micro-copy">
-          <p className="section-tag">Journal</p>
-          <h2>Notes, moments, and the story in between.</h2>
+          <p className="section-tag">{t('journal.tag')}</p>
+          <h2>{t('journal.title')}</h2>
+          <p className="journal-preview-copy">{journalEntries.length} days · {journeyStops.map((stop) => stop.city).join(' · ')}</p>
+          <a className="section-link" href="#/journal">Open our journal <span aria-hidden="true">→</span></a>
         </div>
       </section>
 

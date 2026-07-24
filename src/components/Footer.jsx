@@ -1,11 +1,15 @@
+import { useLanguage } from '../context/LanguageContext.jsx'
+
 function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="site-footer">
       <div className="footer-inner">
-        <p className="footer-title">Thomas &amp; Maggie</p>
-        <p className="footer-subtitle">“Our Honeymoon 2026”</p>
-        <p className="footer-destinations">Amsterdam • Munich • Nice • Singapore</p>
-        <p className="footer-note">Built with ❤️</p>
+        <p className="footer-title">{t('footer.title')}</p>
+        <p className="footer-subtitle">{t('footer.subtitle')}</p>
+        <p className="footer-destinations">{t('footer.route')}</p>
+        <p className="footer-note">{t('footer.note')}</p>
       </div>
     </footer>
   )
