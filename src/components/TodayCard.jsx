@@ -1,6 +1,6 @@
+import { useLanguage } from '../context/LanguageContext.jsx'
 import { destinations } from '../data/destinations.js'
-import { journalEntries } from '../data/journal.js'
-import { createGoogleMapsSearchUrl } from '../utils/maps.js'
+import { getTripDay } from '../data/trip.js'
 import WeatherCard from './WeatherCard.jsx'
 
 function parseTripDate(value) {
@@ -12,76 +12,107 @@ function startOfDay(value) {
   return new Date(value.getFullYear(), value.getMonth(), value.getDate())
 }
 
-function getJournalDate(value) {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(value)
+function toDateKey(value) {
+  const year = value.getFullYear()
+  const month = String(value.getMonth() + 1).padStart(2, '0')
+  const day = String(value.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function formatDate(value) {
+  return new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(value)
+}
+
+function allActivities(day) {
+  return day ? [...day.morning, ...day.afternoon, ...day.evening] : []
 }
 
 function getTravelState(referenceDate, destinationList) {
   const today = startOfDay(referenceDate)
-  const activeIndex = destinationList.findIndex((destination) => (
-    today >= parseTripDate(destination.tripDates.arrival)
-    && today < parseTripDate(destination.tripDates.departure)
-  ))
+  const dateKey = toDateKey(today)
+  const tripDay = getTripDay(dateKey)
 
-  if (activeIndex >= 0) {
+  if (tripDay) {
+    const currentIndex = destinationList.findIndex((destination) => destination.id === tripDay.destination.id)
     return {
-      destination: destinationList[activeIndex],
-      label: 'Current city',
-      nextDestination: destinationList[activeIndex + 1] || null,
+      destination: destinationList[currentIndex] || tripDay.destination,
+      day: tripDay.day,
+      labelKey: 'currentCity',
+      nextDestination: destinationList[currentIndex + 1] || null,
       today,
+      isBeforeTrip: false,
     }
   }
 
   const nextDestination = destinationList.find((destination) => today < parseTripDate(destination.tripDates.arrival))
   if (nextDestination) {
-    return { destination: nextDestination, label: 'Upcoming city', nextDestination, today }
+    return {
+      destination: nextDestination,
+      day: nextDestination.days[0],
+      labelKey: 'upcomingCity',
+      nextDestination,
+      today,
+      isBeforeTrip: true,
+    }
   }
 
   return {
     destination: destinationList.at(-1),
-    label: 'Journey complete',
+    day: null,
+    labelKey: 'journeyComplete',
     nextDestination: null,
     today,
+    isBeforeTrip: false,
   }
 }
 
-function getCountdown(travelState) {
-  if (!travelState.nextDestination) return 'Every chapter is now part of our story'
+function getCountdown(travelState, t) {
+  if (!travelState.nextDestination) return t('todayCard.everyChapter')
 
   const arrival = parseTripDate(travelState.nextDestination.tripDates.arrival)
   const days = Math.max(0, Math.ceil((arrival - travelState.today) / 86400000))
-  if (days === 0) return `Today · Onward to ${travelState.nextDestination.city}`
-  return `${days} ${days === 1 ? 'day' : 'days'} to ${travelState.nextDestination.city}`
+  if (days === 0) return `${t('todayCard.todayOnward')} ${travelState.nextDestination.city}`
+  return `${days} ${t(days === 1 ? 'todayCard.dayTo' : 'todayCard.daysTo')} ${travelState.nextDestination.city}`
 }
 
-function TodayCard({ referenceDate = new Date(), destinationList = destinations, entries = journalEntries }) {
+function getNextActivity(day, referenceDate) {
+  const now = referenceDate.getHours() * 60 + referenceDate.getMinutes()
+  return allActivities(day).find((item) => {
+    if (!item.time) return false
+    const [hours, minutes] = item.time.split(':').map(Number)
+    return (hours * 60 + minutes) >= now
+  }) || null
+}
+
+function TodayCard({ referenceDate = new Date(), destinationList = destinations }) {
+  const { t } = useLanguage()
   const travelState = getTravelState(referenceDate, destinationList)
-  const { destination } = travelState
-  const journalEntry = entries.find((entry) => entry.date === getJournalDate(travelState.today))
-  const itinerary = journalEntry?.itinerary || destination.today.itinerary
-  const restaurants = journalEntry?.restaurants || destination.today.restaurants
+  const { destination, day } = travelState
+  const itinerary = allActivities(day)
+  const nextActivity = !travelState.isBeforeTrip && day ? getNextActivity(day, referenceDate) : null
+  const mapLinks = [
+    { label: destination.hotel.name, url: destination.links.googleMaps },
+    ...itinerary.map((item) => ({ label: item.location, url: item.mapUrl })),
+  ].filter((item, index, list) => list.findIndex((candidate) => candidate.url === item.url) === index).slice(0, 4)
 
   return (
-    <section className="today-card-section" aria-label="Today’s travel companion">
+    <section className="today-card-section" aria-label={t('todayCard.ariaLabel')}>
       <article className="today-card">
         <header className="today-card__header">
           <div>
-            <p className="section-tag">Live Travel Companion · {travelState.label}</p>
+            <p className="section-tag">{t('todayCard.liveCompanion')} · {t(`todayCard.${travelState.labelKey}`)}</p>
             <h2>{destination.city}</h2>
-            <span>{destination.country} · {getJournalDate(travelState.today)}</span>
+            <span>{destination.country} · {formatDate(travelState.today)}</span>
           </div>
-          <div className="today-card__countdown"><small>Next chapter</small><strong>{getCountdown(travelState)}</strong></div>
+          <div className="today-card__countdown"><small>{t('todayCard.nextChapter')}</small><strong>{getCountdown(travelState, t)}</strong></div>
         </header>
 
         <div className="today-card__grid">
           <section className="today-card__stay">
-            <p>Tonight’s hotel</p>
-            <h3>{destination.travel.hotel}</h3>
-            <a href={destination.links.googleMaps} target="_blank" rel="noreferrer">Open in Google Maps <span aria-hidden="true">↗</span></a>
+            <p>{t('todayCard.travelHomeBase')}</p>
+            <h3>{destination.hotel.name}</h3>
+            {destination.hotel.suite && <span className="today-card__suite">{destination.hotel.suite}</span>}
+            <a href={destination.links.googleMaps} target="_blank" rel="noreferrer">{t('concierge.openGoogleMaps')} <span aria-hidden="true">↗</span></a>
           </section>
 
           <section className="today-card__weather">
@@ -89,21 +120,27 @@ function TodayCard({ referenceDate = new Date(), destinationList = destinations,
           </section>
 
           <section className="today-card__plan">
-            <h3>Today’s itinerary</h3>
-            <ol>{itinerary.map((item) => <li key={item}>{item}</li>)}</ol>
+            <h3>{t(travelState.isBeforeTrip ? 'todayCard.firstDayPreview' : 'todayCard.todayPlan')}</h3>
+            {day && <p className="today-card__day-title">{day.title}</p>}
+            {itinerary.length > 0 ? (
+              <ol>{itinerary.map((item) => <li key={`${item.title}-${item.displayTime || ''}`}><span>{item.displayTime && <time>{item.displayTime}</time>}{item.title}</span></li>)}</ol>
+            ) : <p>{t('todayCard.everyChapter')}</p>}
           </section>
 
           <section className="today-card__restaurants">
-            <h3>Restaurants</h3>
+            <h3>{t('todayCard.nextScheduled')}</h3>
+            <div className="today-card__next-activity">
+              {nextActivity ? (
+                <><time>{nextActivity.displayTime}</time><strong>{nextActivity.title}</strong><span>{nextActivity.location}</span></>
+              ) : <p>{travelState.isBeforeTrip ? day?.note : t('todayCard.noMoreScheduled')}</p>}
+            </div>
+            <h3 className="today-card__maps-title">{t('todayCard.usefulMaps')}</h3>
             <ul>
-              {restaurants.map((restaurant) => (
-                <li key={restaurant}>
-                  <span>{restaurant}</span>
-                  <a href={createGoogleMapsSearchUrl(restaurant, destination.city)} target="_blank" rel="noreferrer">Map</a>
-                </li>
+              {mapLinks.map((item) => (
+                <li key={item.url}><span>{item.label}</span><a href={item.url} target="_blank" rel="noreferrer">{t('todayCard.map')}</a></li>
               ))}
             </ul>
-            <a className="today-card__journal" href="#/journal">Open today’s journal <span aria-hidden="true">→</span></a>
+            <a className="today-card__journal" href="#/journal">{t('todayCard.openJournal')} <span aria-hidden="true">→</span></a>
           </section>
         </div>
       </article>

@@ -1,9 +1,9 @@
 import Footer from './Footer.jsx'
 import Navbar from './Navbar.jsx'
 
-function PageLayout({ eyebrow, title, intro, children }) {
+function PageLayout({ eyebrow, title, intro, className = '', children }) {
   return (
-    <div className="page-shell inner-page-shell">
+    <div className={`page-shell inner-page-shell ${className}`.trim()}>
       <Navbar />
       <main id="main-content" tabIndex="-1">
         <header className="inner-page-hero">

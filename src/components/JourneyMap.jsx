@@ -142,13 +142,12 @@ function JourneyMap({ stops, segments }) {
 
       <header className="journey-map__header">
         <p>The Grand Route</p>
-        <h1>San Francisco to Singapore</h1>
-        <span>Nine chapters · Three continents · One unforgettable journey</span>
+        <h1>San Francisco to Ningbo</h1>
+        <span>Nine route points · Four hotel stays · One complete honeymoon journey</span>
       </header>
 
       <div className="journey-map__legend" aria-label="Map legend">
         <span><i className="legend-flight" /> Flights</span>
-        <span><i className="legend-ground" /> Train / car</span>
         <span><i className="legend-stay" /> Hotel stays</span>
       </div>
 
@@ -162,7 +161,7 @@ function JourneyMap({ stops, segments }) {
             <div><span>Departure</span><strong>{selectedStop.departure}</strong></div>
           </div>
           <dl className="journey-map-card__stay">
-            <div><dt>Hotel</dt><dd>{selectedStop.hotel}</dd></div>
+            <div><dt>{selectedStop.nights > 0 ? 'Hotel' : 'Journey role'}</dt><dd>{selectedStop.hotel}</dd></div>
             <div><dt>Nights</dt><dd>{selectedStop.nights || 'Transit'}</dd></div>
             <div><dt>Flights & transfers</dt><dd>{selectedStop.flights.join(' · ')}</dd></div>
           </dl>

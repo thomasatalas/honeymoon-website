@@ -1,46 +1,12 @@
-export const hotels = [
-  {
-    city: 'Amsterdam',
-    name: 'Waldorf Astoria Amsterdam',
-    checkIn: 'Check-in: Sept 27',
-    checkOut: 'Check-out: Sept 30',
-    suite: 'Signature Suite',
-    nights: '3 nights',
-    description: 'A canal-side retreat spanning six historic palaces in the heart of Amsterdam.',
-    highlights: ['Herengracht location', 'Garden courtyard', 'Spa & indoor pool'],
-    variant: 'amsterdam',
-  },
-  {
-    city: 'Munich',
-    name: 'Andaz Munich Schwabinger Tor',
-    checkIn: 'Check-in: Sept 30',
-    checkOut: 'Check-out: Oct 4',
-    suite: 'Executive Suite',
-    nights: '4 nights',
-    description: 'Modern Bavarian design, skyline views, and an elevated home base for Munich.',
-    highlights: ['Rooftop spa', 'Alpine views', 'Schwabing district'],
-    variant: 'munich',
-  },
-  {
-    city: 'Nice',
-    name: 'Hyatt Regency Palais de la Méditerranée',
-    checkIn: 'Check-in: Oct 4',
-    checkOut: 'Check-out: Oct 8',
-    suite: 'Sea View Suite',
-    nights: '4 nights',
-    description: 'Belle Époque elegance overlooking the Mediterranean and the Promenade des Anglais.',
-    highlights: ['Sea-view terrace', 'Historic façade', 'Promenade access'],
-    variant: 'nice',
-  },
-  {
-    city: 'Singapore',
-    name: 'Grand Hyatt Singapore',
-    checkIn: 'Check-in: Oct 9',
-    checkOut: 'Check-out: Oct 13',
-    suite: 'Grand Executive Suite',
-    nights: '4 nights',
-    description: 'A lush city sanctuary moments from Orchard Road and Singapore’s vibrant dining scene.',
-    highlights: ['Garden setting', 'Club lounge', 'Central location'],
-    variant: 'singapore',
-  },
-]
+import { trip } from './trip.js'
+
+export const hotels = trip.destinations.map((destination) => ({
+  city: destination.city,
+  name: destination.hotel.name,
+  checkIn: destination.hotel.checkIn,
+  checkOut: destination.hotel.checkOut,
+  nights: `${destination.hotel.nights} nights`,
+  description: destination.hotel.description,
+  highlights: destination.hotel.highlights,
+  variant: destination.id,
+}))

@@ -1,34 +1,38 @@
-import { useLanguage } from '../context/LanguageContext.jsx'
 import { createGoogleMapsSearchUrl } from '../utils/maps.js'
+import { officialHotelMedia } from '../data/officialMedia.js'
+import { EditorialMedia } from './EditorialMedia.jsx'
 
 function HotelCard({ hotel }) {
-  const { t } = useLanguage()
+  const media = officialHotelMedia[hotel.variant]
 
   return (
-    <article className={`hotel-card ${hotel.variant}`}>
-      <div className="hotel-visual" aria-hidden="true">
-        <span>{hotel.city}</span>
-        <strong>{hotel.city.slice(0, 2)}</strong>
-        <small>{hotel.nights}</small>
-      </div>
+    <article className={`hotel-collection-card hotel-collection-card--${hotel.variant}`}>
+      <EditorialMedia
+        media={media}
+        fallbackEyebrow={hotel.city}
+        fallbackTitle={hotel.name}
+        className="hotel-collection-card__media"
+      />
 
-      <div className="hotel-content">
-        <div className="card-meta-row">
-          <span className="five-star-badge">{t('cards.fiveStar')}</span>
-          <span className="suite-badge">{hotel.suite}</span>
-        </div>
-        <p className="city-name">{hotel.city}</p>
-        <p className="hotel-name">{hotel.name}</p>
-        <p className="hotel-description">{hotel.description}</p>
-        <div className="stay-details">
-          <p>{hotel.checkIn}</p>
-          <p>{hotel.checkOut}</p>
-        </div>
-        <ul className="hotel-highlights" aria-label={`${hotel.name} highlights`}>
+      <div className="hotel-collection-card__content">
+        <p className="hotel-collection-card__city">{hotel.city}</p>
+        <h2>{hotel.name}</h2>
+        <p className="hotel-collection-card__description">{hotel.description}</p>
+
+        <dl className="hotel-collection-card__stay">
+          <div><dt>Check-in</dt><dd>{hotel.checkIn}</dd></div>
+          <div><dt>Checkout</dt><dd>{hotel.checkOut}</dd></div>
+          <div><dt>Stay</dt><dd>{hotel.nights}</dd></div>
+        </dl>
+
+        <ul className="hotel-collection-card__highlights" aria-label={`${hotel.name} highlights`}>
           {hotel.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
         </ul>
-        <a className="hotel-concierge-link" href={`#/destination/${hotel.variant}`}>Destination concierge <span aria-hidden="true">→</span></a>
-        <a className="hotel-map-link" href={createGoogleMapsSearchUrl(hotel.name, hotel.city)} target="_blank" rel="noreferrer">Open in Google Maps <span aria-hidden="true">↗</span></a>
+
+        <div className="hotel-collection-card__links">
+          <a href={`#/destination/${hotel.variant}`}>Destination concierge <span aria-hidden="true">→</span></a>
+          <a href={createGoogleMapsSearchUrl(hotel.name, hotel.city)} target="_blank" rel="noreferrer">Google Maps <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </article>
   )

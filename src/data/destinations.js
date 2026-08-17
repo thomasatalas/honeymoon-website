@@ -1,158 +1,31 @@
-export const destinations = [
-  {
-    id: 'amsterdam',
-    city: 'Amsterdam',
-    country: 'Netherlands',
-    coordinates: { latitude: 52.3676, longitude: 4.9041 },
-    tripDates: { arrival: '2026-09-27', departure: '2026-09-30' },
+import { getConnection, getTripDestination, trip } from './trip.js'
+
+function connectionSummary(connection, direction) {
+  if (!connection) return 'Details are contained in the daily itinerary'
+  const endpoint = direction === 'arrival' ? connection.arrival : connection.departure
+  return `${connection.carrier} ${connection.number} · ${connection.route} · ${endpoint.time}`
+}
+
+export const destinations = trip.destinations.map((destination) => {
+  const arrival = getConnection(destination.arrivalConnectionId)
+  const departure = getConnection(destination.departureConnectionId)
+
+  return {
+    ...destination,
+    tripDates: { arrival: destination.dateRange.start, departure: destination.dateRange.end },
     weatherPlaceholder: { condition: 'Live weather pending', temperature: '—', icon: 'pending', sunrise: '—', sunset: '—' },
     travel: {
-      hotel: 'Waldorf Astoria Amsterdam',
-      checkIn: 'Time to be confirmed',
-      checkOut: 'Time to be confirmed',
-      nights: 3,
-      arriving: 'Emirates via Dubai · Flight details pending',
-      departing: 'Rail journey to Munich · Schedule pending',
+      hotel: destination.hotel.name,
+      checkIn: destination.hotel.checkIn,
+      checkOut: destination.hotel.checkOut,
+      nights: destination.hotel.nights,
+      arriving: destination.arrivalSummary || connectionSummary(arrival, 'arrival'),
+      departing: connectionSummary(departure, 'departure'),
     },
-    today: {
-      itinerary: ['Canal-side arrival', 'Jordaan golden-hour walk', 'Private canal cruise'],
-      reservations: ['Waldorf Astoria stay · September 27–30', 'Canal cruise · Time pending'],
-      restaurants: ['The Pantry', 'Spectrum', 'Canal-side dinner'],
-      attractions: ['Rijksmuseum', 'Nine Streets', 'Jordaan', 'Museum Quarter'],
-    },
-    helpful: {
-      currency: 'Euro (EUR)',
-      exchangeRate: 'Live exchange rate pending',
-      emergency: '112',
-      timeZone: 'Central European Time · Europe/Amsterdam',
-      plugType: 'Type C / F · 230V',
-      language: 'Dutch · English widely spoken',
-    },
-    links: {
-      googleMaps: 'https://www.google.com/maps/search/?api=1&query=Waldorf+Astoria+Amsterdam',
-      appleMaps: 'https://maps.apple.com/?q=Waldorf+Astoria+Amsterdam',
-      hotelWebsite: 'https://www.hilton.com/en/hotels/amswawa-waldorf-astoria-amsterdam/',
-      hotelReservation: null,
-      airlineBooking: 'https://www.emirates.com/us/english/book/',
-      weatherDetails: 'https://www.google.com/search?q=Amsterdam+weather',
-    },
-  },
-  {
-    id: 'munich',
-    city: 'Munich',
-    country: 'Germany',
-    coordinates: { latitude: 48.1351, longitude: 11.582 },
-    tripDates: { arrival: '2026-09-30', departure: '2026-10-04' },
-    weatherPlaceholder: { condition: 'Live weather pending', temperature: '—', icon: 'pending', sunrise: '—', sunset: '—' },
-    travel: {
-      hotel: 'Andaz Munich Schwabinger Tor',
-      checkIn: 'Time to be confirmed',
-      checkOut: 'Time to be confirmed',
-      nights: 4,
-      arriving: 'Rail journey from Amsterdam · Schedule pending',
-      departing: 'Private transfer to Nice · Details pending',
-    },
-    today: {
-      itinerary: ['Marienplatz and Old Town', 'English Garden afternoon', 'Rooftop sunset'],
-      reservations: ['Andaz Munich · September 30–October 4', 'Neuschwanstein day trip · October 3'],
-      restaurants: ['Bayerischer Hof', 'Modern Bavarian dinner', 'Alpine lunch'],
-      attractions: ['Munich Residenz', 'English Garden', 'Marienplatz', 'Neuschwanstein Castle'],
-    },
-    helpful: {
-      currency: 'Euro (EUR)',
-      exchangeRate: 'Live exchange rate pending',
-      emergency: '112',
-      timeZone: 'Central European Time · Europe/Berlin',
-      plugType: 'Type C / F · 230V',
-      language: 'German · English widely spoken',
-    },
-    links: {
-      googleMaps: 'https://www.google.com/maps/search/?api=1&query=Andaz+Munich+Schwabinger+Tor',
-      appleMaps: 'https://maps.apple.com/?q=Andaz+Munich+Schwabinger+Tor',
-      hotelWebsite: 'https://www.hyatt.com/andaz/en-US/mucaz-andaz-munich-schwabinger-tor',
-      hotelReservation: null,
-      airlineBooking: null,
-      weatherDetails: 'https://www.google.com/search?q=Munich+weather',
-    },
-  },
-  {
-    id: 'nice',
-    city: 'Nice',
-    country: 'France',
-    coordinates: { latitude: 43.7102, longitude: 7.262 },
-    tripDates: { arrival: '2026-10-04', departure: '2026-10-08' },
-    weatherPlaceholder: { condition: 'Live weather pending', temperature: '—', icon: 'pending', sunrise: '—', sunset: '—' },
-    travel: {
-      hotel: 'Hôtel Palais de la Méditerranée',
-      checkIn: 'Time to be confirmed',
-      checkOut: 'Time to be confirmed',
-      nights: 4,
-      arriving: 'Private transfer from Munich · Details pending',
-      departing: 'Qatar Airways via Doha · Flight details pending',
-    },
-    today: {
-      itinerary: ['Cours Saleya market', 'Old Nice and Castle Hill', 'Mediterranean sunset'],
-      reservations: ['Palais de la Méditerranée · October 4–8', 'Monaco day trip · October 6'],
-      restaurants: ['Le Royal', 'Monaco terrace lunch', 'Sunset seaside dinner'],
-      attractions: ['Promenade des Anglais', 'Castle Hill', 'Cours Saleya', 'Monte Carlo'],
-    },
-    helpful: {
-      currency: 'Euro (EUR)',
-      exchangeRate: 'Live exchange rate pending',
-      emergency: '112',
-      timeZone: 'Central European Time · Europe/Paris',
-      plugType: 'Type C / E · 230V',
-      language: 'French · English in major hotels',
-    },
-    links: {
-      googleMaps: 'https://www.google.com/maps/search/?api=1&query=Hotel+Palais+de+la+Mediterranee+Nice',
-      appleMaps: 'https://maps.apple.com/?q=Hotel+Palais+de+la+Mediterranee+Nice',
-      hotelWebsite: 'https://www.hyatt.com/unbound-collection/en-US/ncehr-hotel-palais-de-la-mediterranee',
-      hotelReservation: null,
-      airlineBooking: 'https://www.qatarairways.com/en-us/book.html',
-      weatherDetails: 'https://www.google.com/search?q=Nice+France+weather',
-    },
-  },
-  {
-    id: 'singapore',
-    city: 'Singapore',
-    country: 'Singapore',
-    coordinates: { latitude: 1.3521, longitude: 103.8198 },
-    tripDates: { arrival: '2026-10-09', departure: '2026-10-13' },
-    weatherPlaceholder: { condition: 'Live weather pending', temperature: '—', icon: 'pending', sunrise: '—', sunset: '—' },
-    travel: {
-      hotel: 'Grand Hyatt Singapore',
-      checkIn: 'Time to be confirmed',
-      checkOut: 'Time to be confirmed',
-      nights: 4,
-      arriving: 'Qatar Airways via Doha · Flight details pending',
-      departing: 'Cathay Pacific via Hong Kong · Flight details pending',
-    },
-    today: {
-      itinerary: ['Gardens by the Bay', 'Civic District', 'Marina Bay after dark'],
-      reservations: ['Grand Hyatt Singapore · October 9–13', 'Honeymoon dinner · October 11'],
-      restaurants: ['Private dining', 'Modern Singaporean tasting', 'Farewell brunch'],
-      attractions: ['Gardens by the Bay', 'Marina Bay', 'Botanic Gardens', 'Orchard Road'],
-    },
-    helpful: {
-      currency: 'Singapore Dollar (SGD)',
-      exchangeRate: 'Live exchange rate pending',
-      emergency: 'Police 999 · Ambulance / Fire 995',
-      timeZone: 'Singapore Standard Time · Asia/Singapore',
-      plugType: 'Type G · 230V',
-      language: 'English · Mandarin · Malay · Tamil',
-    },
-    links: {
-      googleMaps: 'https://www.google.com/maps/search/?api=1&query=Grand+Hyatt+Singapore',
-      appleMaps: 'https://maps.apple.com/?q=Grand+Hyatt+Singapore',
-      hotelWebsite: 'https://www.hyatt.com/grand-hyatt/en-US/sinrs-grand-hyatt-singapore',
-      hotelReservation: null,
-      airlineBooking: 'https://www.cathaypacific.com/cx/en_US/book-a-trip.html',
-      weatherDetails: 'https://www.google.com/search?q=Singapore+weather',
-    },
-  },
-]
+  }
+})
 
 export function getDestination(destinationId) {
   return destinations.find((destination) => destination.id === destinationId)
+    || getTripDestination(destinationId)
 }

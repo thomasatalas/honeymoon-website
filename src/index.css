@@ -1,20 +1,25 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-family: 'Avenir Next', 'SF Pro Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.65;
   font-weight: 400;
-  color: #f9f4e8;
-  background: #08070b;
+  color: #34413e;
+  background: #f7f4ee;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --gold: #f1cf8d;
-  --gold-strong: #c79a48;
-  --ivory: #f8f1e2;
-  --panel: rgba(20, 20, 24, 0.66);
-  --panel-strong: rgba(24, 23, 28, 0.88);
-  --border-soft: rgba(214, 184, 118, 0.24);
+  --gold: #9d7650;
+  --gold-strong: #795a3c;
+  --ivory: #fffdf8;
+  --panel: rgba(255, 253, 248, 0.82);
+  --panel-strong: rgba(255, 253, 248, 0.96);
+  --border-soft: rgba(74, 83, 79, 0.13);
+  --ink: #2d3936;
+  --ink-soft: #69736f;
+  --paper: #f7f4ee;
+  --paper-warm: #efe9df;
+  --shadow-soft: 0 20px 60px rgba(68, 61, 51, 0.1);
   --font-display: 'Iowan Old Style', 'Baskerville', 'Songti SC', 'Times New Roman', serif;
   --font-body: 'Avenir Next', 'SF Pro Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   --space-section: clamp(4.5rem, 8vw, 7.5rem);
@@ -33,24 +38,12 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background:
-    radial-gradient(circle at top, rgba(197, 151, 71, 0.16), transparent 28%),
-    radial-gradient(circle at 85% 0%, rgba(255, 255, 255, 0.03), transparent 18%),
-    linear-gradient(180deg, #08070b, #0a090c 48%, #08070b);
+  background: var(--paper);
   letter-spacing: 0.01em;
   font-family: var(--font-body);
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04), transparent 24%),
-    radial-gradient(circle at 90% 12%, rgba(214, 184, 118, 0.06), transparent 22%);
-  opacity: 0.85;
-}
+body::before { content: none; }
 
 button,
 input,
@@ -90,6 +83,6 @@ section[id] {
 }
 
 ::selection {
-  background: rgba(214, 184, 118, 0.35);
-  color: #fff7ea;
+  background: rgba(157, 118, 80, 0.22);
+  color: #26322f;
 }

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import DestinationCard from './DestinationCard.jsx'
 import { useLanguage } from '../context/LanguageContext.jsx'
 
-function Timeline({ stops, sectionId = 'hotels' }) {
+function Timeline({ stops, sectionId = 'hotels', showHeader = true }) {
   const { t } = useLanguage()
 
   useEffect(() => {
@@ -34,10 +34,12 @@ function Timeline({ stops, sectionId = 'hotels' }) {
 
   return (
     <section id={sectionId} className="journey-timeline" aria-label="Honeymoon journey timeline">
-      <div className="timeline-header">
-        <p className="section-tag">{t('timeline.tag')}</p>
-        <h2>{t('timeline.title')}</h2>
-      </div>
+      {showHeader && (
+        <div className="timeline-header">
+          <p className="section-tag">{t('timeline.tag')}</p>
+          <h2>{t('timeline.title')}</h2>
+        </div>
+      )}
 
       <div className="timeline-track">
         {stops.map((stop) => (
