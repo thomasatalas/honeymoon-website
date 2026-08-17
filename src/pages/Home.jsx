@@ -34,8 +34,8 @@ function Home() {
         <ProposalGallery showHeader={false} />
       </div>
 
-      <div className="story-chapter story-chapter--wedding">
-        <StoryHeader chapter="wedding" align="right" t={t} />
+      <div className="story-chapter story-chapter--celebrations">
+        <StoryHeader chapter="celebrations" align="right" t={t} />
         <ShanghaiGallery showHeader={false} />
       </div>
 

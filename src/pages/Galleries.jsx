@@ -21,6 +21,18 @@ function Galleries() {
       />
       <ProposalGallery />
       <ShanghaiGallery />
+      <PhotoGallery
+        folderKey="napa"
+        title="Napa Wedding Gallery"
+        subtitle="Our Celebrations"
+        id="napa-wedding-gallery"
+      />
+      <PhotoGallery
+        folderKey="hangzhou"
+        title="Hangzhou Family Banquet Gallery"
+        subtitle="Future Gallery"
+        id="hangzhou-family-banquet-gallery"
+      />
     </PageLayout>
   )
 }
