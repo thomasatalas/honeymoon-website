@@ -28,7 +28,7 @@ export const en = {
     gallery: {
       eyebrow: 'Captured Together',
       title: 'Our Gallery',
-      intro: 'The proposal, the wedding, and every beautiful moment leading to the journey ahead.',
+      intro: 'The proposal, our Napa wedding, family banquets in Shanghai and Hangzhou, and every beautiful moment leading to the journey ahead.',
     },
     journal: {
       eyebrow: 'Seventeen Days',
@@ -51,7 +51,7 @@ export const en = {
   },
   story: {
     proposal: { eyebrow: 'Where It Began', title: 'The proposal', intro: 'One question, one beautiful yes, and the first page of everything that followed.' },
-    wedding: { eyebrow: 'Two Celebrations', title: 'Our wedding story', intro: 'Across Shanghai and Napa, surrounded by the people and places that shaped us.' },
+    celebrations: { eyebrow: 'Our Celebrations', title: 'Our celebrations', intro: 'Our Napa wedding and family banquets in Shanghai and Hangzhou, surrounded by the people and places that shaped us.' },
     route: { eyebrow: 'The Honeymoon', title: 'Four stays, one complete route', intro: 'From San Francisco through Europe and Singapore to Ningbo, every transition becomes part of the keepsake.' },
     countdown: { eyebrow: 'Until We Go', title: 'days until our next chapter' },
     today: { eyebrow: 'Travel Companion', title: 'Today’s journey', intro: 'The details we need now, held alongside the memories we will keep forever.' },

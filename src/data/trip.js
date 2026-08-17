@@ -227,7 +227,7 @@ export const trip = {
       reservations: [
         { item: 'Andaz Munich Schwabinger Tor · Junior Suite', status: 'Confirmed', note: 'September 30–October 4; checkout at 12:00 PM.' },
         { item: 'Lufthansa LH2305 Amsterdam–Munich', status: 'Confirmed', note: 'September 30 · 3:40–5:05 PM.' },
-        { item: 'Germany–Serbia match tickets', status: 'Awaiting input', note: 'Add block, gate and mobile-ticket details when available.' },
+        { item: 'Germany–Serbia match tickets', status: 'Confirmed', note: 'Tickets are confirmed; no private ticket or seating details are published.' },
         { item: 'SIXT BMW M340 Touring rental', status: 'Confirmed', note: 'Pickup October 2 at 3:00 PM and return October 4 at 3:00 PM, both at Munich Airport.' },
         { item: 'The Lonely Broccoli · September 30 at 8:00 PM', status: 'Reserve', note: 'Book two to four weeks before arrival.' },
         { item: 'Alpenrose Mittenwald · October 3 around 12:30 PM', status: 'Reserve', note: 'Holiday lunch on the driving loop.' },
@@ -247,7 +247,7 @@ export const trip = {
           date: '2026-10-01', title: 'Marienplatz, Oktoberfest and Germany–Serbia', note: 'Use U6 for both the city and Allianz Arena; protect the hotel rest before kickoff.',
           morning: [activity('Marienplatz, Glockenspiel and FC Bayern World', 'Marienplatz Munich', 'Confirmed', { time: '09:45', displayTime: '9:45 AM–12:30 PM', transportation: 'U6 from Dietlindenstraße to Marienplatz.' })],
           afternoon: [activity('View lunch, Oktoberfest walk-through and hotel rest', 'Theresienwiese Munich', 'Optional', { time: '12:30', displayTime: '12:30–4:00 PM', transportation: 'U-Bahn to the festival grounds, then return to Andaz.', note: 'No tent reservation; spend only 45–75 minutes on the grounds.' })],
-          evening: [activity('Germany vs Serbia at Allianz Arena', 'Allianz Arena Munich', 'Awaiting input', { time: '17:45', displayTime: 'Leave 5:45 PM · kickoff 8:45 PM', transportation: 'Walk to Dietlindenstraße, take U6 toward Garching-Forschungszentrum, exit Fröttmaning, then walk 10–15 minutes.', note: 'Carry the mobile ticket and photo ID.' })],
+          evening: [activity('Germany vs Serbia at Allianz Arena', 'Allianz Arena Munich', 'Confirmed', { time: '17:45', displayTime: 'Leave 5:45 PM · kickoff 8:45 PM', transportation: 'Walk to Dietlindenstraße, take U6 toward Garching-Forschungszentrum, exit Fröttmaning, then walk 10–15 minutes.', note: 'Carry the mobile ticket and photo ID.' })],
           alternatives: ['Café Kreutzkamm, Bar Centrale, Sweet Spot or Viktualienmarkt for lunch', 'Arena tour only if an official DFB-compatible slot appears'],
           journal: { mood: 'Celebratory', notes: 'Old Munich by day and one unforgettable football night.', restaurants: ['Café Glockenspiel', 'Café Kreutzkamm'] },
         },
@@ -284,7 +284,7 @@ export const trip = {
       city: 'Nice', country: 'France', dates: 'October 4–8', dateRange: { start: '2026-10-04', end: '2026-10-08' }, coordinates: { latitude: 43.7102, longitude: 7.262 }, appearance: { side: 'left', variant: 'nice' },
       arrivalConnectionId: 'muc-nce', departureConnectionId: 'nce-doh',
       planningLabel: 'Tentative',
-      planningNote: 'Tentative — awaiting Xiaoyi Sheng’s detailed recommendations. Matisse Museum, Monaco, hotel time and family time remain protected; Cannes is excluded.',
+      planningNote: 'Tentative — awaiting detailed family recommendations. Matisse Museum, Monaco, hotel time and family time remain protected; Cannes is excluded.',
       hotel: { name: 'Hôtel Palais de la Méditerranée', suite: 'Executive Suite', checkIn: 'October 4 · from 3:00 PM', checkInDate: '2026-10-04', checkOut: 'October 8 · 12:00 PM', checkOutDate: '2026-10-08', nights: 4, status: 'Confirmed', description: 'A Promenade hotel with an indoor-outdoor pool and room to slow down.', highlights: ['Promenade location', 'Indoor-outdoor pool', 'Terrace and wellness facilities'] },
       journey: {
         arrivalContext: 'LH2278 from Munich',

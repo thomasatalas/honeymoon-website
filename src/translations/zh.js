@@ -28,7 +28,7 @@ export const zh = {
     gallery: {
       eyebrow: '共同珍藏',
       title: '我们的相册',
-      intro: '从求婚、婚礼到蜜月启程前的每一个美好瞬间。',
+      intro: '从求婚、纳帕婚礼、上海与杭州家宴，到蜜月启程前的每一个美好瞬间。',
     },
     journal: {
       eyebrow: '十六天',
@@ -51,7 +51,7 @@ export const zh = {
   },
   story: {
     proposal: { eyebrow: '故事开始的地方', title: '我们的求婚', intro: '一个问题，一个美好的答案，也开启了此后所有篇章。' },
-    wedding: { eyebrow: '两场庆典', title: '我们的婚礼故事', intro: '从上海到纳帕，在塑造我们的亲友与风景之间共同庆祝。' },
+    celebrations: { eyebrow: '我们的庆典', title: '我们的庆典', intro: '纳帕婚礼，以及上海和杭州的家宴，与塑造我们的亲友共同庆祝。' },
     route: { eyebrow: '蜜月之旅', title: '四座城市，一段徐徐展开的故事', intro: '从阿姆斯特丹的运河到新加坡的夜色，每一次转场都成为珍贵回忆。' },
     countdown: { eyebrow: '距离出发', title: '天后开启下一篇章' },
     today: { eyebrow: '旅行伴侣', title: '今天的旅程', intro: '将此刻需要的细节与未来珍藏的回忆放在一起。' },

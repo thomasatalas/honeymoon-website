@@ -11,13 +11,17 @@ export const photoCollections = {
     folder: '/src/assets/photos/engagement',
     label: 'Engagement',
   },
-  weddingShanghai: {
-    folder: '/src/assets/photos/wedding-shanghai',
-    label: 'Wedding Shanghai',
+  shanghaiFamilyBanquet: {
+    folder: '/src/assets/photos/shanghai',
+    label: 'Shanghai Family Banquet',
   },
-  weddingNapa: {
-    folder: '/src/assets/photos/wedding-napa',
-    label: 'Wedding Napa',
+  napaWedding: {
+    folder: '/src/assets/photos/napa',
+    label: 'Napa Wedding',
+  },
+  hangzhouFamilyBanquet: {
+    folder: '/src/assets/photos/hangzhou',
+    label: 'Hangzhou Family Banquet',
   },
   amsterdam: {
     folder: '/src/assets/photos/amsterdam',

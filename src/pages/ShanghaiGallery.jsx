@@ -4,8 +4,8 @@ function ShanghaiGallery({ showHeader = true }) {
   return (
     <PhotoGallery
       folderKey="shanghai"
-      title="Shanghai Wedding Gallery"
-      subtitle="Wedding Chapter"
+      title="Shanghai Family Banquet Gallery"
+      subtitle="Our Celebrations"
       id="shanghai-gallery"
       showHeader={showHeader}
     />
