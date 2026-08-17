@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
+    "validate:trip": "node scripts/validate-trip-data.mjs",
+    "validate:media": "node scripts/validate-official-media.mjs",
+    "check:media-integrity": "node scripts/validate-official-media.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

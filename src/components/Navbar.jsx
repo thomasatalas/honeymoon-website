@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import LanguageSwitcher from './LanguageSwitcher.jsx'
 import { useLanguage } from '../context/LanguageContext.jsx'
 
 const navigationItems = [
@@ -19,6 +18,7 @@ function getCurrentPath() {
 function Navbar() {
   const { t } = useLanguage()
   const [currentPath, setCurrentPath] = useState(getCurrentPath)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const nav = document.querySelector('.top-nav')
@@ -26,15 +26,23 @@ function Navbar() {
     const onScroll = () => {
       nav?.classList.toggle('nav-scrolled', window.scrollY > 24)
     }
-    const onRouteChange = () => setCurrentPath(getCurrentPath())
+    const onRouteChange = () => {
+      setCurrentPath(getCurrentPath())
+      setMenuOpen(false)
+    }
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
 
     onScroll()
     window.addEventListener('scroll', onScroll)
     window.addEventListener('hashchange', onRouteChange)
+    window.addEventListener('keydown', onKeyDown)
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('hashchange', onRouteChange)
+      window.removeEventListener('keydown', onKeyDown)
     }
   }, [])
 
@@ -42,19 +50,32 @@ function Navbar() {
     <header className="top-nav">
       <a className="brand-mark" href="#/">{t('brandName')}</a>
       <div className="nav-right">
-        <nav className="nav-links" aria-label="Primary navigation">
+        <button
+          className="mobile-menu-toggle"
+          type="button"
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+        <nav id="primary-navigation" className={`nav-links${menuOpen ? ' is-open' : ''}`} aria-label="Primary navigation">
           {navigationItems.map((item) => (
             <a
               key={item.path}
               href={`#${item.path}`}
               className={currentPath === item.path ? 'active' : ''}
               aria-current={currentPath === item.path ? 'page' : undefined}
+              onClick={() => setMenuOpen(false)}
             >
               {t(item.translationKey)}
             </a>
           ))}
         </nav>
-        <LanguageSwitcher />
+        {/* LanguageSwitcher is intentionally hidden until the Chinese experience is comprehensive. */}
       </div>
     </header>
   )

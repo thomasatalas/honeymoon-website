@@ -1,109 +1,49 @@
-export const journeyMapStops = [
-  {
-    id: 'san-francisco',
-    city: 'San Francisco',
-    country: 'United States',
-    coordinates: [37.7749, -122.4194],
-    arrival: 'October 13, 2026',
-    departure: 'September 26, 2026',
-    hotel: 'Home',
-    nights: 0,
-    flights: ['Emirates departure', 'Cathay Pacific return'],
-    stopType: 'home',
-  },
-  {
-    id: 'dubai',
-    city: 'Dubai',
-    country: 'United Arab Emirates',
-    coordinates: [25.2048, 55.2708],
-    arrival: 'September 27, 2026',
-    departure: 'September 27, 2026',
-    hotel: 'Emirates connection',
-    nights: 0,
-    flights: ['Emirates · San Francisco to Dubai', 'Emirates · Dubai to Amsterdam'],
-    stopType: 'transit',
-  },
-  {
-    id: 'amsterdam',
-    city: 'Amsterdam',
-    country: 'Netherlands',
-    coordinates: [52.3676, 4.9041],
-    arrival: 'September 27, 2026',
-    departure: 'September 30, 2026',
-    hotel: 'Waldorf Astoria Amsterdam',
-    nights: 3,
-    flights: ['Emirates · Dubai to Amsterdam'],
-    stopType: 'stay',
-  },
-  {
-    id: 'munich',
-    city: 'Munich',
-    country: 'Germany',
-    coordinates: [48.1351, 11.582],
-    arrival: 'September 30, 2026',
-    departure: 'October 4, 2026',
-    hotel: 'Andaz Munich Schwabinger Tor',
-    nights: 4,
-    flights: ['Rail journey · Amsterdam to Munich'],
-    stopType: 'stay',
-  },
-  {
-    id: 'nice',
-    city: 'Nice',
-    country: 'France',
-    coordinates: [43.7102, 7.262],
-    arrival: 'October 4, 2026',
-    departure: 'October 8, 2026',
-    hotel: 'Hyatt Regency Nice Palais de la Méditerranée',
-    nights: 4,
-    flights: ['Private road journey · Munich to Nice', 'Qatar Airways · Nice to Doha'],
-    stopType: 'stay',
-  },
-  {
-    id: 'doha',
-    city: 'Doha',
-    country: 'Qatar',
-    coordinates: [25.2854, 51.531],
-    arrival: 'October 8, 2026',
-    departure: 'October 9, 2026',
-    hotel: 'Qatar Airways connection',
-    nights: 0,
-    flights: ['Qatar Airways · Nice to Doha', 'Qatar Airways · Doha to Singapore'],
-    stopType: 'transit',
-  },
-  {
-    id: 'singapore',
-    city: 'Singapore',
-    country: 'Singapore',
-    coordinates: [1.3521, 103.8198],
-    arrival: 'October 9, 2026',
-    departure: 'October 13, 2026',
-    hotel: 'Grand Hyatt Singapore',
-    nights: 4,
-    flights: ['Qatar Airways · Doha to Singapore', 'Cathay Pacific · Singapore to Hong Kong'],
-    stopType: 'stay',
-  },
-  {
-    id: 'hong-kong',
-    city: 'Hong Kong',
-    country: 'China',
-    coordinates: [22.3193, 114.1694],
-    arrival: 'October 13, 2026',
-    departure: 'October 13, 2026',
-    hotel: 'Cathay Pacific connection',
-    nights: 0,
-    flights: ['Cathay Pacific · Singapore to Hong Kong', 'Cathay Pacific · Hong Kong to San Francisco'],
-    stopType: 'transit',
-  },
-]
+import { getConnection, trip } from './trip.js'
+
+const shortDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+const formatDate = (date) => date ? shortDate.format(new Date(`${date}T12:00:00Z`)) : 'Schedule pending'
+const connectionLabel = (connection) => `${connection.carrier}${connection.number ? ` ${connection.number}` : ''}`
+
+function destinationStop(destination) {
+  const arrival = getConnection(destination.arrivalConnectionId)
+  const departure = getConnection(destination.departureConnectionId)
+  return {
+    id: destination.id, city: destination.city, country: destination.country,
+    coordinates: [destination.coordinates.latitude, destination.coordinates.longitude],
+    arrival: formatDate(arrival?.arrival?.date || arrival?.date),
+    departure: formatDate(departure?.departure?.date || departure?.date),
+    hotel: destination.hotel.name, nights: destination.hotel.nights,
+    flights: [arrival, departure].filter(Boolean).map(connectionLabel), stopType: 'stay',
+  }
+}
+
+const destinationStops = trip.destinations.map(destinationStop)
+const routeStops = trip.transitLocations.map((location) => {
+  const connections = (location.connectionIds || [location.connectionId]).map(getConnection).filter(Boolean)
+  const arrival = connections.length > 1 ? connections[0] : location.stopType === 'origin' ? null : connections[0]
+  const departure = connections.length > 1 ? connections.at(-1) : location.stopType === 'final' ? null : connections[0]
+  return {
+    ...location,
+    arrival: arrival ? formatDate(arrival.arrival?.date || arrival.date) : 'Journey begins here',
+    departure: departure ? formatDate(departure.departure?.date || departure.date) : 'Journey ends here',
+    hotel: location.label, nights: 0, flights: connections.map(connectionLabel), stopType: location.stopType || 'transit',
+  }
+})
+
+const stopById = new Map([...destinationStops, ...routeStops].map((stop) => [stop.id, stop]))
+const orderedIds = ['san-francisco', 'dubai', 'amsterdam', 'munich', 'nice', 'doha', 'singapore', 'hong-kong', 'ningbo']
+export const journeyMapStops = orderedIds.map((id) => stopById.get(id)).filter(Boolean)
 
 export const journeyMapSegments = [
-  { from: 'san-francisco', to: 'dubai', type: 'flight', label: 'Emirates' },
-  { from: 'dubai', to: 'amsterdam', type: 'flight', label: 'Emirates' },
-  { from: 'amsterdam', to: 'munich', type: 'ground', label: 'Train' },
-  { from: 'munich', to: 'nice', type: 'ground', label: 'Car' },
-  { from: 'nice', to: 'doha', type: 'flight', label: 'Qatar Airways' },
-  { from: 'doha', to: 'singapore', type: 'flight', label: 'Qatar Airways' },
-  { from: 'singapore', to: 'hong-kong', type: 'flight', label: 'Cathay Pacific' },
-  { from: 'hong-kong', to: 'san-francisco', type: 'flight', label: 'Cathay Pacific' },
-]
+  ['san-francisco', 'dubai', 'sfo-dxb'],
+  ['dubai', 'amsterdam', 'dxb-ams'],
+  ['amsterdam', 'munich', 'ams-muc'],
+  ['munich', 'nice', 'muc-nce'],
+  ['nice', 'doha', 'nce-doh'],
+  ['doha', 'singapore', 'doh-sin'],
+  ['singapore', 'hong-kong', 'sin-hkg'],
+  ['hong-kong', 'ningbo', 'hkg-ngb'],
+].map(([from, to, connectionId]) => {
+  const connection = getConnection(connectionId)
+  return { from, to, connectionId, type: 'flight', label: connectionLabel(connection) }
+})

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getMediaCollection } from '../media/mediaLibrary.js'
 
-function PhotoGallery({ folderKey, title, subtitle, id }) {
+function PhotoGallery({ folderKey, title, subtitle, id, showHeader = true }) {
   const images = getMediaCollection(folderKey)
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -29,10 +29,12 @@ function PhotoGallery({ folderKey, title, subtitle, id }) {
 
   return (
     <section id={id} className="gallery-section" aria-label={title}>
-      <div className="timeline-header">
-        <p className="section-tag">{subtitle}</p>
-        <h2>{title}</h2>
-      </div>
+      {showHeader && (
+        <div className="timeline-header">
+          <p className="section-tag">{subtitle}</p>
+          <h2>{title}</h2>
+        </div>
+      )}
 
       {images.length === 0 ? (
         <div className="gallery-placeholder-card">

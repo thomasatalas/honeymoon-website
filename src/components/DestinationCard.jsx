@@ -11,7 +11,7 @@ function DestinationCard({ stop }) {
 
       <div className="destination-copy">
         <div className="card-meta-row">
-          <span className="five-star-badge">{stop.country}</span>
+          <span className="country-badge">{stop.country}</span>
           <span className="suite-badge">{stop.nights}</span>
         </div>
 
@@ -19,7 +19,15 @@ function DestinationCard({ stop }) {
         <p className="country-name">{stop.country}</p>
         <p className="trip-dates">{stop.dates}</p>
         <p className="hotel-name">{stop.hotel}</p>
-        <p className="nights-count">{stop.nights}</p>
+        <div className="itinerary-logistics">
+          <div className="itinerary-logistics__wide"><span>Stay</span><strong>{stop.dates}</strong></div>
+          <div><span>Arrival</span><strong>{stop.logistics.arrival.when}<small>{stop.logistics.arrival.context}</small></strong></div>
+          <div><span>Departure</span><strong>{stop.logistics.departure.when}<small>{stop.logistics.departure.context}</small></strong></div>
+          <div className="itinerary-logistics__wide"><span>Arrival transfer</span><strong>{stop.logistics.arrivalTransfer}</strong></div>
+          <div className="itinerary-logistics__wide"><span>Departure plan</span><strong>{stop.logistics.departurePlan}</strong></div>
+        </div>
+        <p className="reservation-status"><span aria-hidden="true" />{stop.logistics.reservationStatus}</p>
+        <p className="planning-note">Planning guidance · reconfirm before departure</p>
         <a className="explore-button" href={`#/destination/${stop.variant}`}>Open concierge</a>
         <a className="destination-map-link" href={createGoogleMapsSearchUrl(stop.hotel, stop.city)} target="_blank" rel="noreferrer">Open in Google Maps</a>
       </div>
