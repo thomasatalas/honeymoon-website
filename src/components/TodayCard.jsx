@@ -84,14 +84,20 @@ function getNextActivity(day, referenceDate) {
   }) || null
 }
 
+function getCurrentHotel(destination, dateKey) {
+  const stays = destination.stays || [destination.hotel]
+  return stays.find((stay) => stay.checkInDate <= dateKey && dateKey < stay.checkOutDate) || destination.hotel
+}
+
 function TodayCard({ referenceDate = new Date(), destinationList = destinations }) {
   const { t } = useLanguage()
   const travelState = getTravelState(referenceDate, destinationList)
   const { destination, day } = travelState
+  const currentHotel = getCurrentHotel(destination, day?.date || toDateKey(travelState.today))
   const itinerary = allActivities(day)
   const nextActivity = !travelState.isBeforeTrip && day ? getNextActivity(day, referenceDate) : null
   const mapLinks = [
-    { label: destination.hotel.name, url: destination.links.googleMaps },
+    { label: currentHotel.name, url: currentHotel.mapUrl || destination.links.googleMaps },
     ...itinerary.map((item) => ({ label: item.location, url: item.mapUrl })),
   ].filter((item, index, list) => list.findIndex((candidate) => candidate.url === item.url) === index).slice(0, 4)
 
@@ -110,9 +116,9 @@ function TodayCard({ referenceDate = new Date(), destinationList = destinations 
         <div className="today-card__grid">
           <section className="today-card__stay">
             <p>{t('todayCard.travelHomeBase')}</p>
-            <h3>{destination.hotel.name}</h3>
-            {destination.hotel.suite && <span className="today-card__suite">{destination.hotel.suite}</span>}
-            <a href={destination.links.googleMaps} target="_blank" rel="noreferrer">{t('concierge.openGoogleMaps')} <span aria-hidden="true">↗</span></a>
+            <h3>{currentHotel.name}</h3>
+            {currentHotel.suite && <span className="today-card__suite">{currentHotel.suite}</span>}
+            <a href={currentHotel.mapUrl || destination.links.googleMaps} target="_blank" rel="noreferrer">{t('concierge.openGoogleMaps')} <span aria-hidden="true">↗</span></a>
           </section>
 
           <section className="today-card__weather">

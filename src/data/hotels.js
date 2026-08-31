@@ -1,12 +1,18 @@
 import { trip } from './trip.js'
 
-export const hotels = trip.destinations.map((destination) => ({
-  city: destination.city,
-  name: destination.hotel.name,
-  checkIn: destination.hotel.checkIn,
-  checkOut: destination.hotel.checkOut,
-  nights: `${destination.hotel.nights} nights`,
-  description: destination.hotel.description,
-  highlights: destination.hotel.highlights,
-  variant: destination.id,
-}))
+export const hotels = trip.destinations.flatMap((destination) => {
+  const stays = destination.stays || [destination.hotel]
+
+  return stays.map((stay) => ({
+    city: destination.city,
+    name: stay.name,
+    checkIn: stay.checkIn,
+    checkOut: stay.checkOut,
+    nights: `${stay.nights} ${stay.nights === 1 ? 'night' : 'nights'}`,
+    description: stay.description,
+    highlights: stay.highlights,
+    variant: stay.variant || destination.id,
+    destinationId: stay.destinationId || destination.id,
+    googleMapsQuery: stay.googleMapsQuery || stay.name,
+  }))
+})

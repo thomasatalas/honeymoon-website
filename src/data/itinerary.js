@@ -18,6 +18,22 @@ function stayRange(hotel) {
   return `${monthDay.format(start)}–${endLabel}, ${end.getUTCFullYear()}`
 }
 
+function destinationStays(destination) {
+  return destination.stays || [destination.hotel]
+}
+
+function destinationRange(destination) {
+  const start = parseDate(destination.dateRange.start)
+  const end = parseDate(destination.dateRange.end)
+  const sameMonth = start.getUTCFullYear() === end.getUTCFullYear() && start.getUTCMonth() === end.getUTCMonth()
+  const endLabel = sameMonth ? end.getUTCDate() : monthDay.format(end)
+  return `${monthDay.format(start)}–${endLabel}, ${end.getUTCFullYear()}`
+}
+
+function totalNights(destination) {
+  return destinationStays(destination).reduce((sum, stay) => sum + stay.nights, 0)
+}
+
 function timeLabel(point) {
   if (!point?.time) return 'Time pending'
   const [hour, minute] = point.time.split(':').map(Number)
@@ -48,15 +64,15 @@ export const journeyStops = trip.destinations.map((destination) => {
   return {
     city: destination.city,
     country: destination.country,
-    dates: stayRange(destination.hotel),
-    hotel: destination.hotel.name,
-    nights: `${destination.hotel.nights} nights`,
+    dates: destination.stays ? destinationRange(destination) : stayRange(destination.hotel),
+    hotel: destinationStays(destination).map((stay) => stay.name).join(' → '),
+    nights: `${totalNights(destination)} nights`,
     logistics: {
       arrival: endpointSummary(arrival, 'arrival'),
       departure: endpointSummary(departure, 'departure'),
       arrivalTransfer: destination.journey.arrivalTransfer,
       departurePlan: destination.journey.departurePlan,
-      reservationStatus: `${destination.hotel.status} · ${destination.hotel.nights}-night hotel stay`,
+      reservationStatus: `${destination.hotel.status} · ${totalNights(destination)}-night hotel stay`,
     },
     side: destination.appearance.side,
     variant: destination.appearance.variant,

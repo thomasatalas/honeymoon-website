@@ -1,6 +1,6 @@
 # Thomas & Maggie — Honeymoon 2026
 
-A private travel companion and keepsake for Thomas and Maggie’s September–October 2026 honeymoon from San Francisco to Ningbo, with stays in Amsterdam, Munich, Nice and Singapore.
+A private travel companion and keepsake for Thomas and Maggie’s September–October 2026 honeymoon from San Francisco to Ningbo, with four city chapters, five hotel stays and the full flight route.
 
 The React/Vite site combines the real day-by-day itinerary with hotel and flight details, reservation decisions, live weather, an interactive route map, galleries and a read-only journal. The visual system uses the project’s established black, ivory and gold design language and responsive layouts.
 
@@ -11,7 +11,7 @@ The website is English-only for Milestone 3. `LanguageContext`, the Chinese tran
 `src/data/trip.js` is the normalized source of truth for:
 
 - destination dates and coordinates
-- hotels and suites
+- hotels and stay timing
 - the complete SFO–DXB–AMS–MUC–NCE–DOH–SIN–HKG–NGB route and confirmed flight details
 - morning, afternoon and evening plans
 - reservations, alternatives and planning statuses
@@ -23,7 +23,7 @@ The approved hotel and airline collection contains 16 production photographs und
 
 The Hotels and Flights pages use a consistent editorial hero-plus-supporting-image composition. Product photography is presented at the airline level rather than as a guarantee for an individual flight segment.
 
-Only operational itinerary information is included. Booking confirmation numbers, barcodes, QR codes, passport details and the source PDFs are intentionally excluded from the public site.
+Only operational itinerary information is included. Booking confirmation numbers, barcodes, QR codes, passport details, loyalty-account details and the source PDFs are intentionally excluded from the public site.
 
 ## Journal scope
 

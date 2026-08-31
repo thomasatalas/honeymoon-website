@@ -13,12 +13,12 @@ export const en = {
     journey: {
       eyebrow: 'The Grand Tour',
       title: 'Our Journey',
-      intro: 'From San Francisco to Ningbo, with four destination stays and every connection kept in view.',
+      intro: 'From San Francisco to Ningbo, with four city chapters, five hotel stays and every connection kept in view.',
     },
     hotels: {
       eyebrow: 'Our Stays',
-      title: 'Our Four Stays',
-      intro: 'Four personal bases for slower mornings, practical connections and time together.',
+      title: 'Our Hotel Stays',
+      intro: 'Five personal bases for slower mornings, practical connections and time together.',
     },
     flights: {
       eyebrow: 'Above the Clouds',
@@ -42,7 +42,7 @@ export const en = {
     countdownLabel: 'Honeymoon begins in',
     countdownUnit: 'days',
     subtitle: 'San Francisco to Ningbo',
-    dateRange: 'September 27 – October 13, 2026',
+    dateRange: 'September 24 – October 13, 2026',
     button: 'Begin Our Journey',
   },
   progress: {

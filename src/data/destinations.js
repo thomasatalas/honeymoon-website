@@ -6,6 +6,14 @@ function connectionSummary(connection, direction) {
   return `${connection.carrier} ${connection.number} · ${connection.route} · ${endpoint.time}`
 }
 
+function destinationStays(destination) {
+  return destination.stays || [destination.hotel]
+}
+
+function totalNights(destination) {
+  return destinationStays(destination).reduce((sum, stay) => sum + stay.nights, 0)
+}
+
 export const destinations = trip.destinations.map((destination) => {
   const arrival = getConnection(destination.arrivalConnectionId)
   const departure = getConnection(destination.departureConnectionId)
@@ -15,10 +23,10 @@ export const destinations = trip.destinations.map((destination) => {
     tripDates: { arrival: destination.dateRange.start, departure: destination.dateRange.end },
     weatherPlaceholder: { condition: 'Live weather pending', temperature: '—', icon: 'pending', sunrise: '—', sunset: '—' },
     travel: {
-      hotel: destination.hotel.name,
-      checkIn: destination.hotel.checkIn,
-      checkOut: destination.hotel.checkOut,
-      nights: destination.hotel.nights,
+      hotel: destinationStays(destination).map((stay) => stay.name).join(' → '),
+      checkIn: destinationStays(destination)[0].checkIn,
+      checkOut: destinationStays(destination).at(-1).checkOut,
+      nights: totalNights(destination),
       arriving: destination.arrivalSummary || connectionSummary(arrival, 'arrival'),
       departing: connectionSummary(departure, 'departure'),
     },
