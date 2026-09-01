@@ -60,6 +60,7 @@ function ConfirmedSegment({ segment }) {
 
 function FlightCard({ flight, index }) {
   const media = officialFlightMedia[flight.id]
+  const confirmedSegments = flight.segments.filter((segment) => !segment.isPending)
 
   return (
     <article className={`airline-chapter airline-chapter--${flight.id}`}>
@@ -86,9 +87,9 @@ function FlightCard({ flight, index }) {
 
       <div className="airline-chapter__content">
         <div className="airline-chapter__segments">
-          {flight.id === 'emirates'
+          {flight.id === 'emirates' && confirmedSegments.length === 0
             ? <OpeningJourney />
-            : flight.segments.filter((segment) => !segment.isPending).map((segment) => <ConfirmedSegment key={segment.id} segment={segment} />)}
+            : confirmedSegments.map((segment) => <ConfirmedSegment key={segment.id} segment={segment} />)}
         </div>
         <p className="airline-chapter__note">{flightEditorialCopy[flight.id]}</p>
         {flight.connectionNote && <p className="airline-chapter__connection">{flight.connectionNote}</p>}

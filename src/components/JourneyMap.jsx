@@ -143,7 +143,7 @@ function JourneyMap({ stops, segments }) {
       <header className="journey-map__header">
         <p>The Grand Route</p>
         <h1>San Francisco to Ningbo</h1>
-        <span>Nine route points · Four hotel stays · One complete honeymoon journey</span>
+        <span>Nine route points · Five hotel stays · One complete honeymoon journey</span>
       </header>
 
       <div className="journey-map__legend" aria-label="Map legend">

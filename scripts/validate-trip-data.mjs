@@ -1,7 +1,7 @@
 import { trip } from '../src/data/trip.js'
 
 const expectedRoute = ['sfo-dxb', 'dxb-ams', 'ams-muc', 'muc-nce', 'nce-doh', 'doh-sin', 'sin-hkg', 'hkg-ngb']
-const expectedStays = { amsterdam: 3, munich: 4, nice: 4, singapore: 3 }
+const expectedStays = { amsterdam: 4, munich: 4, nice: 4, singapore: 3 }
 const allowedStatuses = new Set(trip.statusLabels)
 const errors = []
 
@@ -14,8 +14,12 @@ for (const [destinationId, nights] of Object.entries(expectedStays)) {
     errors.push(`Missing destination: ${destinationId}`)
     continue
   }
-  if (destination.hotel.nights !== nights) errors.push(`${destinationId} must have ${nights} hotel nights.`)
-  if (!destination.hotel.checkInDate || !destination.hotel.checkOutDate) errors.push(`${destinationId} is missing semantic hotel dates.`)
+  const stays = destination.stays || [destination.hotel]
+  const totalNights = stays.reduce((sum, stay) => sum + stay.nights, 0)
+  if (totalNights !== nights) errors.push(`${destinationId} must have ${nights} hotel nights.`)
+  for (const stay of stays) {
+    if (!stay.checkInDate || !stay.checkOutDate) errors.push(`${destinationId} is missing semantic hotel dates.`)
+  }
   for (const reservation of destination.reservations) {
     if (!allowedStatuses.has(reservation.status)) errors.push(`${destinationId} uses invalid reservation status: ${reservation.status}`)
   }
@@ -38,4 +42,4 @@ if (errors.length) {
   process.exit(1)
 }
 
-console.log(`Trip data valid: ${trip.destinations.length} stays, ${trip.transportation.length} flight segments, ${trip.transitLocations.length + trip.destinations.length} route points.`)
+console.log(`Trip data valid: ${trip.destinations.length} city chapters, ${Object.values(expectedStays).reduce((sum, nights) => sum + nights, 0)} hotel nights, ${trip.transportation.length} flight segments, ${trip.transitLocations.length + trip.destinations.length} route points.`)

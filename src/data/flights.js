@@ -3,7 +3,7 @@ import { getConnection } from './trip.js'
 const chapterDefinitions = [
   {
     id: 'emirates', airline: 'Emirates', chapter: 'Opening journey', connectionIds: ['sfo-dxb', 'dxb-ams'],
-    summary: 'First Class from San Francisco through Dubai to Amsterdam. Aircraft and product-specific features remain unpublished until confirmed.',
+    summary: 'Confirmed First Class from San Francisco through Dubai to Amsterdam, arriving Saturday morning.',
     image: null,
   },
   {
@@ -38,7 +38,7 @@ const compactRoutes = {
 
 function pendingSummary(connection) {
   if (connection.id === 'dxb-ams') {
-    return 'Arrives Sunday, September 27, 2026 at approximately 9:00 AM · remaining schedule details pending'
+    return 'Arrives Saturday, September 26, 2026 at 9:20 AM · remaining schedule details pending'
   }
   return `Schedule details pending · ${connection.cabin}`
 }

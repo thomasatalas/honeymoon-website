@@ -4,6 +4,14 @@ const shortDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numer
 const formatDate = (date) => date ? shortDate.format(new Date(`${date}T12:00:00Z`)) : 'Schedule pending'
 const connectionLabel = (connection) => `${connection.carrier}${connection.number ? ` ${connection.number}` : ''}`
 
+function destinationStays(destination) {
+  return destination.stays || [destination.hotel]
+}
+
+function totalNights(destination) {
+  return destinationStays(destination).reduce((sum, stay) => sum + stay.nights, 0)
+}
+
 function destinationStop(destination) {
   const arrival = getConnection(destination.arrivalConnectionId)
   const departure = getConnection(destination.departureConnectionId)
@@ -12,7 +20,7 @@ function destinationStop(destination) {
     coordinates: [destination.coordinates.latitude, destination.coordinates.longitude],
     arrival: formatDate(arrival?.arrival?.date || arrival?.date),
     departure: formatDate(departure?.departure?.date || departure?.date),
-    hotel: destination.hotel.name, nights: destination.hotel.nights,
+    hotel: destinationStays(destination).map((stay) => stay.name).join(' → '), nights: totalNights(destination),
     flights: [arrival, departure].filter(Boolean).map(connectionLabel), stopType: 'stay',
   }
 }

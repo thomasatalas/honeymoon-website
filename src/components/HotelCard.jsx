@@ -4,6 +4,7 @@ import { EditorialMedia } from './EditorialMedia.jsx'
 
 function HotelCard({ hotel }) {
   const media = officialHotelMedia[hotel.variant]
+  const destinationId = hotel.destinationId || hotel.variant
 
   return (
     <article className={`hotel-collection-card hotel-collection-card--${hotel.variant}`}>
@@ -30,8 +31,8 @@ function HotelCard({ hotel }) {
         </ul>
 
         <div className="hotel-collection-card__links">
-          <a href={`#/destination/${hotel.variant}`}>Destination concierge <span aria-hidden="true">→</span></a>
-          <a href={createGoogleMapsSearchUrl(hotel.name, hotel.city)} target="_blank" rel="noreferrer">Google Maps <span aria-hidden="true">↗</span></a>
+          <a href={`#/destination/${destinationId}`}>Destination concierge <span aria-hidden="true">→</span></a>
+          <a href={createGoogleMapsSearchUrl(hotel.googleMapsQuery || hotel.name, hotel.city)} target="_blank" rel="noreferrer">Google Maps <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </article>

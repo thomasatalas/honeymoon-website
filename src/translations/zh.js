@@ -13,12 +13,12 @@ export const zh = {
     journey: {
       eyebrow: '盛大旅程',
       title: '我们的旅程',
-      intro: '四座城市，十六天，在每一次抵达之间书写一生珍藏的故事。',
+      intro: '从旧金山到宁波，四座城市、五段酒店住宿，每一次转场都清晰记录。',
     },
     hotels: {
-      eyebrow: '臻选居所',
-      title: '酒店与套房',
-      intro: '为美好清晨与难忘夜晚精心挑选的奢华居所。',
+      eyebrow: '我们的住宿',
+      title: '酒店住宿',
+      intro: '五段适合慢下来、衔接行程与享受彼此陪伴的住宿。',
     },
     flights: {
       eyebrow: '云端之上',
@@ -41,13 +41,13 @@ export const zh = {
     title: '托马斯 & Maggie',
     countdownLabel: '蜜月开始于',
     countdownUnit: '天',
-    subtitle: '欧洲与新加坡蜜月之旅',
-    dateRange: '2026年9月27日至10月13日',
+    subtitle: '从旧金山到宁波',
+    dateRange: '2026年9月24日至10月13日',
     button: '开启旅程',
   },
   progress: {
     tag: '路线',
-    title: '从阿姆斯特丹到新加坡',
+    title: '从旧金山到宁波',
   },
   story: {
     proposal: { eyebrow: '故事开始的地方', title: '我们的求婚', intro: '一个问题，一个美好的答案，也开启了此后所有篇章。' },
@@ -71,7 +71,7 @@ export const zh = {
   footer: {
     title: '托马斯 & Maggie',
     subtitle: '“我们的 2026 蜜月”',
-    route: '阿姆斯特丹 • 慕尼黑 • 尼斯 • 新加坡',
+    route: 'SFO • DXB • AMS • MUC • NCE • DOH • SIN • HKG • NGB',
     note: '用 ❤️ 构建',
   },
   language: {
